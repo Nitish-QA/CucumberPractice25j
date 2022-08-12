@@ -4,10 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import PageFactory.HomePage_PF;
+import PageFactory.LoginPage_PF;
 import io.cucumber.java.en.*;
 
 public class LoginSelSteps2_POM {
 	WebDriver driver = null;
+	LoginPage_PF login;
+	HomePage_PF home;
 
 	@Given("browser is open")
 	public void browser_is_open() {
@@ -26,20 +30,26 @@ public class LoginSelSteps2_POM {
 
 	@When("^user enters (.*) and (.*)$")
 	public void user_enters_username_and_password(String username, String password) throws InterruptedException {
-		driver.findElement(By.id("name")).sendKeys(username);
-		driver.findElement(By.id("password")).sendKeys(password);
+		login = new LoginPage_PF(driver);
+		login.enterUsername(username);
+		login.enterPassword(password);
+		//driver.findElement(By.id("name")).sendKeys(username);
+		//driver.findElement(By.id("password")).sendKeys(password);
 
 		Thread.sleep(3000);
 	}
 
 	@And("user clicks on login button")
 	public void user_clicks_on_login_button() {
-		driver.findElement(By.id("login")).click();
+		login.clickLogin();
+		//driver.findElement(By.id("login")).click();
 	}
 
 	@Then("user is naviagted to the home page")
 	public void user_is_naviagted_to_the_home_page() throws InterruptedException {
-		driver.findElement(By.id("logout")).isDisplayed();
+		home = new HomePage_PF(driver);
+		home.verifyLogin();
+		//driver.findElement(By.id("logout")).isDisplayed();
 		Thread.sleep(10000);
 		driver.close();
 		driver.quit();
